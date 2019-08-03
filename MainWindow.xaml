@@ -1,0 +1,114 @@
+﻿<Window x:Class="HP53123_LongExperement.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:HP53123_LongExperement"
+        xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        mc:Ignorable="d"
+        Title="HP54132A xxx" Height="500" Width="850">
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_File">
+                <MenuItem Header="_New" />
+                <MenuItem Header="Open" />
+                <MenuItem Header="_Save" />
+                <Separator />
+                <MenuItem Header="_Exit" />
+            </MenuItem>
+        </Menu>
+        <StatusBar DockPanel.Dock="Bottom">
+            <StatusBarItem>
+                <TextBlock Name="TextBlock_Status" TextAlignment="Left" Text="Статус, служебные сообщения"/>
+            </StatusBarItem>
+        </StatusBar>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="4*"/>
+                <ColumnDefinition Width="6*"/>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="0">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="40"/>
+                    </Grid.RowDefinitions>
+                    <ComboBox Grid.Row="0" Grid.Column="0" Name="ComboBox_COMPorts" Margin="10,10,5,0" VerticalAlignment="Top" DropDownOpened="ComboBox_COMPorts_DropDownOpened" SelectionChanged="ComboBox_COMPorts_SelectionChanged"/>
+                    <Label Grid.Row="0" Grid.Column="1" Name="Label_StatusCOM" Content="Не подключено" Margin="5,10,10,0" VerticalAlignment="Top" Background="LightGray" FontSize="9"/>
+                    <TextBox Grid.Row="1" Grid.ColumnSpan="2" Name="TextBox_FilePos" Text="FileName" Margin="10,10,10,10" ToolTip="По умолчанию файл будет сохранен на рабочий стол"/>
+                    <Button Grid.Row="2" Grid.Column="0" Name="Button_GenerateNewNameFile" Content="Новое имя" Margin="10,10,5,10" Click="Button_GenerateNewNameFile_Click"/>
+                    <Button Grid.Row="2" Grid.Column="1" Name="Button_SetPathFile" Content="Указать путь вручную" Margin="5,10,10,10" Click="Button_SetPathFile_Click"/>
+                    <CheckBox Grid.Row="3" Grid.Column="0" Name="CheckBox_DateTime" Content="Штамп дата-время" Margin="10,10,5,10" VerticalAlignment="Center" IsChecked="True"/>
+                    <CheckBox Grid.Row="3" Grid.Column="1" Name="CheckBox_RAWColumn" Content="RAW колонка" Margin="5,10,10,10" VerticalAlignment="Center" IsChecked="False" ToolTip="Добавить колонку с значением полученным напрямую с COM порта"/>
+                    <RadioButton Grid.Row="4" Grid.Column="0" Name="RadioButton_FixedPoint" GroupName="TypeString" Content="Плавающая точка" Margin="10,10,5,10" VerticalAlignment="Center" ToolTip="Тип разделителя в дроби"/>
+                    <RadioButton Grid.Row="4" Grid.Column="1" Name="RadioButton_Scientific" GroupName="TypeString" Content="Экспоненциальный" Margin="5,10,10,10" VerticalAlignment="Center" IsChecked="True" ToolTip="Тип разделителя в дроби"/>
+                    <Grid Grid.Row="5" Grid.Column="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="3*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox Grid.Column="0" Name="TextBox_FragmentSize" Text="50" Margin="10,10,0,6" TextAlignment="Left" MaxLength="5" PreviewTextInput="TextBox_FragmentSize_PreviewTextInput" ToolTip="Размер блока в выборках который записывается в файл (не рекомендуется ставить значение меньше 20 и больше 1000)"/>
+                        <Label Grid.Column="1" Name="Label_FragmentSize" Content="Кол-во выборок" Margin="5,10,5,0" VerticalAlignment="Top" FontSize="9" BorderThickness="1" BorderBrush="LightGray" ToolTip="Размер блока в выборках который записывается в файл (не рекомендуется ставить значение меньше 20 и больше 1000)"/>
+                    </Grid>
+                    <Label Grid.Row="5" Grid.Column="1" Name="Label_StatusBurn" Content="Статус записи" Margin="5,5,10,0" VerticalAlignment="Center" FontSize="9" BorderThickness="1" BorderBrush="LightGray"/>
+                    <RadioButton Grid.Row="6" Grid.Column="0" Name="RadioButton_Ring" GroupName="TimerOrRing" Margin="10,10,5,10" Content="Время окончания" VerticalAlignment="Center" Checked="RadioButton_Timer_Checked"/>
+                    <RadioButton Grid.Row="6" Grid.Column="1" Name="RadioButton_Timer" GroupName="TimerOrRing" Margin="5,10,10,10" Content="Таймер" VerticalAlignment="Center" IsChecked="True" Checked="RadioButton_Timer_Checked"/>
+                    <xctk:DateTimePicker Grid.Row="7" Grid.Column="0" Name="DateTimePicker_deadline" Margin="10,10,5,10" AllowTextInput="False" Format="Custom" TimeFormat="LongTime" FormatString="dd/MM HH:mm" IsEnabled="False"/>
+                    <xctk:TimeSpanUpDown Grid.Row="7" Grid.Column="1" Name="TimeSpanUpDown_Timer" Margin="5,10,10,10" Value="1:0:0" Minimum="0:1:0"/>
+                    <Button Grid.Row="8" Grid.ColumnSpan="2" Name="Button_FileBurnStart" Content="Начать запись" Margin="5,10,10,10" Click="Button_FileBurnStart_Click" Background="#FFDDDDDD"/>
+                </Grid>
+            </Grid>
+            <TabControl Grid.Column="1">
+                <TabItem Header="TabItem">
+                    <Grid Margin="10,10,10,10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="8*"/>
+                            <RowDefinition Height="2*"/>
+                        </Grid.RowDefinitions>
+                        <lvc:CartesianChart Grid.Row="0" Name="MainChart" Zoom="X" DisableAnimations="False" Hoverable="False" DataTooltip="{x:Null}" MouseDoubleClick="MainChart_MouseDoubleClick">
+                            <lvc:CartesianChart.Series>
+                                <lvc:LineSeries Values="{Binding MainChartValues}" 
+                                PointGeometry="{x:Null}" 
+                                LineSmoothness="0"
+                                StrokeThickness="2" 
+                                Stroke="BurlyWood"
+                                Fill="Transparent"/>
+                            </lvc:CartesianChart.Series>
+                            <lvc:CartesianChart.AxisY>
+                                <lvc:Axis Title="Частота Hz"/>
+                            </lvc:CartesianChart.AxisY>
+                            <lvc:CartesianChart.AxisX>
+                                <lvc:Axis Title="Выборка" Labels="{Binding MainChartLables}">
+                                    <lvc:Axis.Separator>
+                                        <lvc:Separator StrokeDashArray="10"></lvc:Separator>
+                                    </lvc:Axis.Separator>
+                                    <lvc:Axis.Sections>
+                                        <lvc:AxisSection Value="1200" StrokeThickness="3" Stroke="#F9D648">
+                                            <lvc:AxisSection.Fill>
+                                                <SolidColorBrush Color="#A3A3FF" Opacity=".4"></SolidColorBrush>
+                                            </lvc:AxisSection.Fill>
+                                        </lvc:AxisSection>
+                                    </lvc:Axis.Sections>
+                                </lvc:Axis>
+                            </lvc:CartesianChart.AxisX>
+                        </lvc:CartesianChart>
+                    </Grid>
+                </TabItem>
+            </TabControl>
+        </Grid>
+    </DockPanel>
+
+</Window>
