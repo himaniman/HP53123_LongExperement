@@ -7,9 +7,9 @@
         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
-        Title="HP54132A xxx" Height="500" Width="850">
+        Title="HP53132A Программа для сохранение измерений частоты в файл v0.17" Height="500" Width="850" Background="White">
     <DockPanel>
-        <Menu DockPanel.Dock="Top">
+        <!--<Menu DockPanel.Dock="Top">
             <MenuItem Header="_File">
                 <MenuItem Header="_New" />
                 <MenuItem Header="Open" />
@@ -17,9 +17,9 @@
                 <Separator />
                 <MenuItem Header="_Exit" />
             </MenuItem>
-        </Menu>
+        </Menu>-->
         <StatusBar DockPanel.Dock="Bottom">
-            <StatusBarItem>
+            <StatusBarItem HorizontalAlignment="Left">
                 <TextBlock Name="TextBlock_Status" TextAlignment="Left" Text="Статус, служебные сообщения"/>
             </StatusBarItem>
         </StatusBar>
@@ -53,26 +53,29 @@
                     <Button Grid.Row="2" Grid.Column="1" Name="Button_SetPathFile" Content="Указать путь вручную" Margin="5,10,10,10" Click="Button_SetPathFile_Click"/>
                     <CheckBox Grid.Row="3" Grid.Column="0" Name="CheckBox_DateTime" Content="Штамп дата-время" Margin="10,10,5,10" VerticalAlignment="Center" IsChecked="True"/>
                     <CheckBox Grid.Row="3" Grid.Column="1" Name="CheckBox_RAWColumn" Content="RAW колонка" Margin="5,10,10,10" VerticalAlignment="Center" IsChecked="False" ToolTip="Добавить колонку с значением полученным напрямую с COM порта"/>
-                    <RadioButton Grid.Row="4" Grid.Column="0" Name="RadioButton_FixedPoint" GroupName="TypeString" Content="Плавающая точка" Margin="10,10,5,10" VerticalAlignment="Center" ToolTip="Тип разделителя в дроби"/>
-                    <RadioButton Grid.Row="4" Grid.Column="1" Name="RadioButton_Scientific" GroupName="TypeString" Content="Экспоненциальный" Margin="5,10,10,10" VerticalAlignment="Center" IsChecked="True" ToolTip="Тип разделителя в дроби"/>
+                    <RadioButton Grid.Row="4" Grid.Column="0" Name="RadioButton_FixedPoint" GroupName="TypeString" Content="Плавающая точка" Margin="10,10,5,10" VerticalAlignment="Center" ToolTip="Тип разделителя в дроби" Click="RadioButton_Scientific_Click"/>
+                    <RadioButton Grid.Row="4" Grid.Column="1" Name="RadioButton_Scientific" GroupName="TypeString" Content="Экспоненциальный" Margin="5,10,10,10" VerticalAlignment="Center" IsChecked="True" ToolTip="Тип разделителя в дроби" Click="RadioButton_Scientific_Click"/>
                     <Grid Grid.Row="5" Grid.Column="0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="2*"/>
                             <ColumnDefinition Width="3*"/>
                         </Grid.ColumnDefinitions>
-                        <TextBox Grid.Column="0" Name="TextBox_FragmentSize" Text="50" Margin="10,10,0,6" TextAlignment="Left" MaxLength="5" PreviewTextInput="TextBox_FragmentSize_PreviewTextInput" ToolTip="Размер блока в выборках который записывается в файл (не рекомендуется ставить значение меньше 20 и больше 1000)"/>
+                        <TextBox Grid.Column="0" Name="TextBox_FragmentSize" Text="50" Margin="10,5,0,0" TextAlignment="Left" MaxLength="5" PreviewTextInput="TextBox_FragmentSize_PreviewTextInput" ToolTip="Размер блока в выборках который записывается в файл (не рекомендуется ставить значение меньше 20 и больше 1000)" Height="24"/>
                         <Label Grid.Column="1" Name="Label_FragmentSize" Content="Кол-во выборок" Margin="5,10,5,0" VerticalAlignment="Top" FontSize="9" BorderThickness="1" BorderBrush="LightGray" ToolTip="Размер блока в выборках который записывается в файл (не рекомендуется ставить значение меньше 20 и больше 1000)"/>
                     </Grid>
                     <Label Grid.Row="5" Grid.Column="1" Name="Label_StatusBurn" Content="Статус записи" Margin="5,5,10,0" VerticalAlignment="Center" FontSize="9" BorderThickness="1" BorderBrush="LightGray"/>
-                    <RadioButton Grid.Row="6" Grid.Column="0" Name="RadioButton_Ring" GroupName="TimerOrRing" Margin="10,10,5,10" Content="Время окончания" VerticalAlignment="Center" Checked="RadioButton_Timer_Checked"/>
-                    <RadioButton Grid.Row="6" Grid.Column="1" Name="RadioButton_Timer" GroupName="TimerOrRing" Margin="5,10,10,10" Content="Таймер" VerticalAlignment="Center" IsChecked="True" Checked="RadioButton_Timer_Checked"/>
-                    <xctk:DateTimePicker Grid.Row="7" Grid.Column="0" Name="DateTimePicker_deadline" Margin="10,10,5,10" AllowTextInput="False" Format="Custom" TimeFormat="LongTime" FormatString="dd/MM HH:mm" IsEnabled="False"/>
+                    <RadioButton Grid.Row="6" Grid.Column="0" Name="RadioButton_QtyMeas" GroupName="TimerOrQty" Margin="10,10,5,10" Content="Кол-во измерений" VerticalAlignment="Center" Checked="RadioButton_QtyMeas_Checked"/>
+                    <RadioButton Grid.Row="6" Grid.Column="1" Name="RadioButton_Timer" GroupName="TimerOrQty" Margin="5,10,10,10" Content="Таймер" VerticalAlignment="Center" IsChecked="True" Checked="RadioButton_Timer_Checked"/>
+                    <TextBox Grid.Row="7" Grid.Column="0" Name="TextBox_QtyMeas" Text="100" Margin="10,10,5,10" TextAlignment="Left" MaxLength="10" PreviewTextInput="TextBox_QtyMeas_PreviewTextInput" IsEnabled="False"/>
+                    <!--<xctk:DateTimePicker Grid.Row="7" Grid.Column="0" Name="DateTimePicker_deadline" Margin="10,10,5,10" AllowTextInput="False" Format="Custom" TimeFormat="LongTime" FormatString="dd/MM HH:mm" IsEnabled="False"/>-->
                     <xctk:TimeSpanUpDown Grid.Row="7" Grid.Column="1" Name="TimeSpanUpDown_Timer" Margin="5,10,10,10" Value="1:0:0" Minimum="0:1:0"/>
                     <Button Grid.Row="8" Grid.ColumnSpan="2" Name="Button_FileBurnStart" Content="Начать запись" Margin="5,10,10,10" Click="Button_FileBurnStart_Click" Background="#FFDDDDDD"/>
+                    <ProgressBar Grid.Row="9" Grid.ColumnSpan="2" Margin="10,10,10,10" Minimum="0" Maximum="100" Value="0" Name="ProgressBar_Status"/>
+                    <TextBlock Grid.Row="9" Grid.ColumnSpan="2" Name="TextBlock_ETA" Margin="10,10,10,10" Text="Время/Измерения до окончания" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                 </Grid>
             </Grid>
-            <TabControl Grid.Column="1">
-                <TabItem Header="TabItem">
+            <TabControl Grid.Column="1" Background="{x:Null}">
+                <TabItem Header="Измерения OnLine">
                     <Grid Margin="10,10,10,10">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="8*"/>
@@ -84,11 +87,12 @@
                                 PointGeometry="{x:Null}" 
                                 LineSmoothness="0"
                                 StrokeThickness="2" 
-                                Stroke="BurlyWood"
                                 Fill="Transparent"/>
                             </lvc:CartesianChart.Series>
                             <lvc:CartesianChart.AxisY>
-                                <lvc:Axis Title="Частота Hz"/>
+                                <lvc:Axis 
+                                    LabelFormatter="{Binding YFormatter}"
+                                    Title="Частота"/>
                             </lvc:CartesianChart.AxisY>
                             <lvc:CartesianChart.AxisX>
                                 <lvc:Axis Title="Выборка" Labels="{Binding MainChartLables}">
@@ -105,6 +109,7 @@
                                 </lvc:Axis>
                             </lvc:CartesianChart.AxisX>
                         </lvc:CartesianChart>
+                        <TextBlock Grid.Row="1" Name="TextBlock_CurrentValue" Text="Текущее значение" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="10"/>
                     </Grid>
                 </TabItem>
             </TabControl>
